@@ -1,4 +1,10 @@
-# Defillama Adapters
+# Wormhub Adapters
+
+Our protocol adapters are forked from Defillama as it is well maintained by their team, initially this will be to help run part of the "DeFi Toolset", in the future we may look to move to our own if we go down the data aggregator path, and have sufficient maintainers.
+
+---
+
+_Defillama Docs:_
 
 Follow [this guide](https://docs.llama.fi/submit-a-project) to create an adapter and submit a PR with it.
 
