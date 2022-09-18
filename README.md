@@ -2,7 +2,7 @@
 
 Our protocol adapters are forked from Defillama as the repo is well maintained by their team, initially this will be to help run part of the "DeFi Toolset" which is to be a value-add/additional utility for the Worm Dashboard. 
 
-In the future we may look to move to our own adapters if we go down the data aggregator path, and have sufficient maintainers.
+In the future we may look to move to our own adapter library if we go down the data aggregator path, and have sufficient maintainers.
 
 ---
 
