@@ -52,6 +52,17 @@ const defaultTokens = {
     '0x1a4b46696b2bb4794eb3d4c26f1c55f9170fa4c5', //BITDAO
     '0x6f259637dcd74c767781e37bc6133cd6a68aa161',  //HT
     '0xba9d4199fab4f26efe3551d490e3821486f135ba', //CHSB
+    '0xdc9Ac3C20D1ed0B540dF9b1feDC10039Df13F99c', //UTK
+    '0xd13c7342e1ef687c5ad21b27c2b65d772cab5c8c', //UOS
+    '0x90b831fa3bebf58e9744a14d638e25b4ee06f9bc', //MIMO
+    '0x408e41876cccdc0f92210600ef50372656052a38', //REN
+    '0xC581b735A1688071A1746c968e0798D642EDE491', //EURO-T
+    '0x4da27a545c0c5b758a6ba100e3a049001de870f5', //aAAVE
+    '0xa06bc25b5805d5f8d82847d191cb4af5a3e873e0', //aLINK
+    '0xae7ab96520de3a18e5e111b5eaab095312d7fe84', //stETH
+    '0x9ee91f9f426fa633d227f7a9b000e28b9dfd8599', //STmatic
+    '0xc00e94cb662c3520282e6f5717214004a7f26888', //COMP
+    '0x1c48f86ae57291f7686349f12601910bd8d470bb', //USDK
   ],
   tron: [
     nullAddress,
@@ -62,6 +73,7 @@ const defaultTokens = {
     nullAddress,
     '0xc2132d05d31c914a87c6611c10748aeb04b58e8f', // USDT
     '0x0000000000000000000000000000000000001010', // WMATIC
+    '0x7ceb23fd6bc0add59e62ac25578270cff1b9f619', // WETH
   ],
   algorand: [],
   solana: [],
@@ -79,6 +91,9 @@ const defaultTokens = {
     '0x1d2f0da169ceb9fc7b3144628db156f3f6c60dbe', // BXRP
     '0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d', // B-USDC
     '0x14016e85a25aeb13065688cafb43044c2ef86784', // B-TUSD
+    '0x2859e4544c4bb03966803b044a93563bd2d0dd4d', // SHIB
+    '0x3ee2200efb3400fabb9aacf31297cbdd1d435d47', //ADA
+
   ],
   eos: [
     ["eosio.token", "EOS", "eos"],
