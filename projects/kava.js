@@ -11,11 +11,11 @@ async function tvl() {
         Number(deposits[i].amount.amount / 10 ** info.decimals);
     } else {
       balances[info.id] = deposits[i].amount.amount / 10 ** info.decimals;
-    };
-  };
+    }
+  }
   
   return balances;
-};
+}
 
 function convertSymbol(symbol) {
   switch (symbol) {
@@ -28,7 +28,7 @@ function convertSymbol(symbol) {
     case 'hard':
       return {id: 'kava-lend', decimals: 6};
     case 'hbtc':
-      return {id: 'bitcoin', decimals: 8};
+      return {id: 'huobi-btc', decimals: 8};
     case 'swp':
       return {id: 'kava-swap', decimals: 6};
     case 'ukava':
@@ -39,8 +39,8 @@ function convertSymbol(symbol) {
       return {id: 'terra-usd', decimals: 6};
     default:
       console.log(symbol);
-  };
-};
+  }
+}
 
 module.exports = {
   timetravel: false,

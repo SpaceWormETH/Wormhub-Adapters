@@ -1,7 +1,9 @@
 const axios = require("axios");
 const http = require('./http')
+const cache = require('./cache')
+const env = require('./env')
 const { transformBalances: transformBalancesOrig, transformDexBalances, } = require('./portedTokens.js')
-const { tokens } = require('./tokenMapping')
+const { tokens, getUniqueAddresses } = require('./tokenMapping')
 const { Connection, PublicKey, Keypair } = require("@solana/web3.js")
 const { AnchorProvider: Provider, Wallet, } = require("@project-serum/anchor");
 const { sleep, sliceIntoChunks, log, } = require('./utils')
@@ -16,7 +18,7 @@ const blacklistedTokens = [
 
 let connection, provider
 
-const endpoint = process.env.SOLANA_RPC || "https://rpc.ankr.com/solana" // or "https://solana-api.projectserum.com/"
+const endpoint = env.SOLANA_RPC || "https://rpc.ankr.com/solana" // or "https://solana-api.projectserum.com/"
 
 function getConnection() {
   if (!connection) connection = new Connection(endpoint)
@@ -70,13 +72,6 @@ async function getGeckoSolTokens() {
   return tokenSet
 }
 
-async function getSolTokenMap() {
-  const tokenList = await getTokenList()
-  let map = {}
-  tokenList.forEach(i => map[i.address] = i)
-  return map
-}
-
 async function getTokenDecimals(tokens) {
   const calls = tokens => tokens.map((t, i) => ({ jsonrpc: '2.0', id: t, method: 'getTokenSupply', params: [t] }))
   const res = {}
@@ -121,7 +116,7 @@ async function getTokenBalances(tokensAndAccounts) {
   return balances
 }
 
-async function getTokenAccountBalances(tokenAccounts, { individual = false, chunkSize = 99 } = {}) {
+async function getTokenAccountBalances(tokenAccounts, { individual = false, chunkSize = 99, allowError = false, } = {}) {
   log('total token accounts: ', tokenAccounts.length)
   const formBody = account => ({ method: "getAccountInfo", jsonrpc: "2.0", params: [account, { encoding: "jsonParsed", commitment: "confirmed" }], id: account })
   const balancesIndividual = []
@@ -137,6 +132,7 @@ async function getTokenAccountBalances(tokenAccounts, { individual = false, chun
           return;
         }
         console.log(data.data.map(i => i.result.value)[i], tokenAccounts[i].toString())
+        if (allowError) return;
       }
       const { data: { parsed: { info: { mint, tokenAmount: { amount } } } } } = value
       sdk.util.sumSingleBalance(balances, mint, amount)
@@ -301,13 +297,6 @@ function exportDexTVL(DEX_PROGRAM_ID, getTokenAccounts) {
   }
 }
 
-async function getSaberPools() {
-  return http.get('https://registry.saber.so/data/llama.mainnet.json')
-}
-async function getQuarryData() {
-  return http.get('https://raw.githubusercontent.com/QuarryProtocol/rewarder-list-build/master/mainnet-beta/tvl.json')
-}
-
 async function sumTokens2({
   balances = {},
   tokensAndOwners = [],
@@ -317,6 +306,7 @@ async function sumTokens2({
   tokenAccounts = [],
   solOwners = [],
   blacklistedTokens = [],
+  allowError = false,
 }) {
   if (!tokensAndOwners.length) {
     if (owner) tokensAndOwners = tokens.map(t => [t, owner])
@@ -338,14 +328,17 @@ async function sumTokens2({
   }
 
   if (tokenAccounts.length) {
-    const tokenBalances = await getTokenAccountBalances(tokenAccounts)
-    return transformBalances({ tokenBalances, balances, })
+    tokenAccounts = getUniqueAddresses(tokenAccounts, 'solana')
+    const tokenBalances = await getTokenAccountBalances(tokenAccounts, { allowError })
+    await transformBalances({ tokenBalances, balances, })
   }
 
   if (solOwners.length) {
     const solBalance = await getSolBalances(solOwners)
     sdk.util.sumSingleBalance(balances, tokenMapping.solana, solBalance)
   }
+
+  blacklistedTokens.forEach(i => delete balances['solana:'+i])
 
   return balances
 
@@ -388,8 +381,6 @@ module.exports = {
   exportDexTVL,
   getProvider,
   getConnection,
-  getSaberPools,
-  getQuarryData,
   sumTokens2,
   getTokenBalances,
   transformBalances,
@@ -398,7 +389,6 @@ module.exports = {
   getGeckoSolTokens,
   getTokenAccountBalances,
   getTokenList,
-  getSolTokenMap,
   readBigUInt64LE,
   decodeAccount,
 };

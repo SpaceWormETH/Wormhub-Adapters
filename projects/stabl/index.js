@@ -8,19 +8,7 @@ const assets = {
     polygon: "0x2791bca1f2de4661ed88a30c99a7a9449aa84174", //USDC
 }
 
-const abi = {
-    "inputs": [],
-    "name": "checkBalance",
-    "outputs": [
-        {
-            "internalType": "uint256",
-            "name": "",
-            "type": "uint256"
-        }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-}
+const abi = "uint256:checkBalance"
 
 module.exports = {
   misrepresentedTokens: true,
@@ -31,7 +19,8 @@ Object.keys(vaults).forEach(chain => {
     tvl: async (_, _b, {[chain]: block}) => {
         const { output } = await sdk.api.abi.call({ chain, block, abi, target: vaults[chain]})
         return {
-            [`${chain}:${assets[chain]}`]: output
+            // refilling wont work because at mar 26th the decimals used by checkBalance() changed
+            [`${chain}:${assets[chain]}`]: output/100
         }
     }
   }
