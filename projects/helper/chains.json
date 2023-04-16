@@ -53,6 +53,7 @@
   "energyweb",
   "enuls",
   "eos",
+  "equilibrium",
   "era",
   "ergo",
   "ethereum",
@@ -143,6 +144,7 @@
   "posi",
   "proton",
   "reef",
+  "regen",
   "rei",
   "reichain",
   "ripple",
@@ -198,5 +200,6 @@
   "zeniq",
   "zilliqa",
   "zksync",
-  "zyx"
+  "zyx",
+  "filecoin"
 ]
